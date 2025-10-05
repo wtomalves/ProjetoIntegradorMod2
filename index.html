@@ -1,286 +1,342 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR" data-bs-theme="dark">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Reporte de Buracos - Embu das Artes</title>
-  
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  />
-  
-<link
-  rel="stylesheet"
-  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-  crossorigin=""
-/>
-<script
-  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-  crossorigin=""
-></script>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Reporte de Buracos - Embu das Artes</title>
 
-  <style>
-    #map { 
-      height: 65vh; border-radius: 0.75rem; 
-    }
-    .leaflet-container { 
-      background: #0b0f14; 
-    }
-  </style>
-</head>
-<body>
-  <div class="container py-4">
-    <header class="mb-3">
-      <h1 class="h4">
-        🚧 Aplicação: Reporte de Buracos na Rua - Embu das Artes 🚧
-      </h1>
-    </header>
-    
-    <div class="row g-3 align-items-stretch mb-3">
-      <div class="col-12 col-md-4 d-grid">
-        <button id="btnReport" class="btn btn-primary">
-          📍 Aqui tem um Buraco na Rua!
-        </button>
-      </div>
-      <div class="col-12 col-md-8">
-        <label for="statusBox" class="form-label mb-1">Status do Reporte</label>
-        <input id="statusBox" class="form-control" placeholder="Aguardando reporte..." readonly />
-      </div>
-    </div>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
 
-    <hr class="my-3">
-    
-    <div class="d-flex justify-content-between align-items-center mb-2">
-      <h2 class="h5 mb-0">🗺️ Mapa de Ocorrências Registradas</h2>
-      <div class="d-flex gap-2">
-        <button id="btnAtualizar" class="btn btn-outline-secondary btn-sm">
-          🔄 Atualizar Mapa
-        </button>
-        <div class="dropstart">
-          <button class="btn btn-outline-light btn-sm dropdown-toggle" data-bs-toggle="dropdown">
-            ⚙️ Opções
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+
+    <style>
+      #map {
+        height: 65vh;
+        border-radius: 0.75rem;
+      }
+      .leaflet-container {
+        background: #0b0f14;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container py-4">
+      <header class="mb-3">
+        <h1 class="h4">
+          🚧 Aplicação: Reporte de Buracos na Rua - Embu das Artes 🚧
+        </h1>
+      </header>
+
+      <div class="row g-3 align-items-stretch mb-3">
+        <div class="col-12 col-md-4 d-grid">
+          <button
+            id="btnReport"
+            class="btn btn-primary"
+            type="button"
+            aria-label="Reportar buraco usando minha localização"
+          >
+            📍 Aqui tem um Buraco na Rua!
           </button>
-          <ul class="dropdown-menu dropdown-menu-dark">
-            <li><button id="btnExportar" class="dropdown-item">Exportar JSON</button></li>
-            <li><button id="btnImportar" class="dropdown-item">Importar JSON…</button></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><button id="btnLimpar" class="dropdown-item text-danger">Limpar todos os reportes</button></li>
-          </ul>
+        </div>
+        <div class="col-12 col-md-8">
+          <label for="statusBox" class="form-label mb-1"
+            >Status do Reporte</label
+          >
+          <input
+            id="statusBox"
+            class="form-control"
+            placeholder="Aguardando reporte..."
+            readonly
+            role="status"
+            aria-live="polite"
+          />
         </div>
       </div>
+
+      <hr class="my-3" />
+
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h2 class="h5 mb-0">🗺️ Mapa de Ocorrências Registradas</h2>
+        <div class="d-flex gap-2">
+          <button
+            id="btnAtualizar"
+            class="btn btn-outline-secondary btn-sm"
+            type="button"
+            aria-label="Atualizar mapa"
+          >
+            🔄 Atualizar Mapa
+          </button>
+          <div class="dropstart">
+            <button
+              class="btn btn-outline-light btn-sm dropdown-toggle"
+              data-bs-toggle="dropdown"
+            >
+              ⚙️ Opções
+            </button>
+            <ul class="dropdown-menu dropdown-menu-dark">
+              <li>
+                <button id="btnExportar" class="dropdown-item">
+                  Exportar JSON
+                </button>
+              </li>
+              <li>
+                <button id="btnImportar" class="dropdown-item">
+                  Importar JSON…
+                </button>
+              </li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <button id="btnLimpar" class="dropdown-item text-danger">
+                  Limpar todos os reportes
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div id="map" class="mb-3"></div>
+
+      <footer class="text-secondary small">
+        <span
+          >Tiles: © OpenStreetMap & CartoDB • Construído com Bootstrap +
+          Leaflet</span
+        >
+      </footer>
     </div>
-    
-    <div id="map" class="mb-3"></div>
 
-    <footer class="text-secondary small">
-      <span>Tiles: © OpenStreetMap & CartoDB • Construído com Bootstrap + Leaflet</span>
-    </footer>
-  </div>
-  
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-  <script>
-    
-    const EMBU_COORDS = [-23.6491, -46.8524];
-    const STORAGE_KEY = "buracos_embu"; // LocalStorage "banco"
-    const statusBox = document.getElementById("statusBox");
-    const btnReport = document.getElementById("btnReport");
-    const btnAtualizar = document.getElementById("btnAtualizar");
-    const btnExportar = document.getElementById("btnExportar");
-    const btnImportar = document.getElementById("btnImportar");
-    const btnLimpar = document.getElementById("btnLimpar");
-    
-    function loadReports() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        return raw ? JSON.parse(raw) : [];
-      } catch {
-        return [];
-      }
-    }
+    <script>
+      const EMBU_COORDS = [-23.6491, -46.8524];
+      const STORAGE_KEY = "buracos_embu"; // LocalStorage "banco"
+      const statusBox = document.getElementById("statusBox");
+      const btnReport = document.getElementById("btnReport");
+      const btnAtualizar = document.getElementById("btnAtualizar");
+      const btnExportar = document.getElementById("btnExportar");
+      const btnImportar = document.getElementById("btnImportar");
+      const btnLimpar = document.getElementById("btnLimpar");
 
-    function saveReports(list) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
-    }
-
-    function addReport(lat, lng) {
-      const reports = loadReports();
-      const now = new Date();
-      reports.push({
-        latitude: lat,
-        longitude: lng,
-        timestamp: now.toISOString(), 
-      });
-      saveReports(reports);
-    }
-
-    function formatBrDate(isoString) {
-      const d = new Date(isoString);
-      const dd = String(d.getDate()).padStart(2, "0");
-      const mm = String(d.getMonth() + 1).padStart(2, "0");
-      const yyyy = d.getFullYear();
-      const hh = String(d.getHours()).padStart(2, "0");
-      const min = String(d.getMinutes()).padStart(2, "0");
-      return `${dd}/${mm}/${yyyy} às ${hh}:${min}`;
-    }
-
-    function setStatus(msg) {
-      statusBox.value = msg;
-    }
-    
-    let map, markersLayer;
-
-    function initMap() {
-      if (map) return; 
-      map = L.map("map", {
-        center: EMBU_COORDS,
-        zoom: 14,
-        zoomControl: true,
-      });
-      
-      L.tileLayer(
-        "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-        {
-          maxZoom: 19,
-          attribution:
-            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      function loadReports() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          return raw ? JSON.parse(raw) : [];
+        } catch {
+          return [];
         }
-      ).addTo(map);
+      }
 
-      markersLayer = L.layerGroup().addTo(map);
-    }
+      function saveReports(list) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+      }
 
-    function renderMarkers() {
-      if (!map) initMap();
-
-      const reports = loadReports();
-      markersLayer.clearLayers();
-
-      const bounds = [];
-      reports.forEach((r) => {
-        const marker = L.marker([r.latitude, r.longitude], {
-          title: "Buraco Reportado",
+      function addReport(lat, lng) {
+        const reports = loadReports();
+        const now = new Date();
+        reports.push({
+          latitude: lat,
+          longitude: lng,
+          timestamp: now.toISOString(),
         });
-        marker.bindPopup(
-          `<b>Buraco reportado</b><br/>Reportado em: ${formatBrDate(r.timestamp)}`
-        );
-        marker.bindTooltip("Buraco Reportado");
-        marker.addTo(markersLayer);
-        bounds.push([r.latitude, r.longitude]);
-      });
-
-      if (bounds.length > 0) {
-        map.fitBounds(bounds, { padding: [30, 30] });
-      } else {
-        map.setView(EMBU_COORDS, 14);
-      }
-    }
-    
-    function solicitarLocalizacaoEReportar() {
-      if (!navigator.geolocation) {
-        alert("Geolocalização não é suportada por este navegador.");
-        setStatus("Falha: geolocalização não suportada.");
-        return;
+        saveReports(reports);
       }
 
-      alert(
-        "Vamos solicitar sua localização. Por favor, aceite o pedido de permissão no navegador."
-      );
+      function formatBrDate(isoString) {
+        const d = new Date(isoString);
+        const dd = String(d.getDate()).padStart(2, "0");
+        const mm = String(d.getMonth() + 1).padStart(2, "0");
+        const yyyy = d.getFullYear();
+        const hh = String(d.getHours()).padStart(2, "0");
+        const min = String(d.getMinutes()).padStart(2, "0");
+        return `${dd}/${mm}/${yyyy} às ${hh}:${min}`;
+      }
 
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const lat = pos.coords.latitude;
-          const lng = pos.coords.longitude;
-          addReport(lat, lng);
-          renderMarkers();
+      function setStatus(msg) {
+        statusBox.value = msg;
+      }
 
-          const agora = new Date();
-          const dd = String(agora.getDate()).padStart(2, "0");
-          const mm = String(agora.getMonth() + 1).padStart(2, "0");
-          const yyyy = agora.getFullYear();
-          const hh = String(agora.getHours()).padStart(2, "0");
-          const mi = String(agora.getMinutes()).padStart(2, "0");
-          setStatus(
-            `✅ Buraco reportado com sucesso às ${dd}/${mm}/${yyyy} ${hh}:${mi}! O mapa foi atualizado.`
-          );
-        },
-        (error) => {
-          console.error("Erro de Geolocalização:", error);
-          setStatus(
-            "ERRO: Não foi possível obter sua localização. Verifique as permissões do navegador."
-          );
-          alert(
-            "ERRO: Não foi possível obter a sua localização. Verifique as permissões do navegador e, se necessário, abra a página em https ou localhost."
-          );
-        },
-        { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
-      );
-    }
+      let map, markersLayer;
 
-    
-    function exportarJSON() {
-      const blob = new Blob([JSON.stringify(loadReports(), null, 2)], {
-        type: "application/json;charset=utf-8",
-      });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "buracos_embu.json";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }
+      function initMap() {
+        if (map) return;
+        map = L.map("map", {
+          center: EMBU_COORDS,
+          zoom: 14,
+          zoomControl: true,
+        });
 
-    function importarJSON() {
-      const input = document.createElement("input");
-      input.type = "file";
-      input.accept = "application/json";
-      input.onchange = (e) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = () => {
-          try {
-            const data = JSON.parse(reader.result);
-            if (!Array.isArray(data)) throw new Error("Formato inválido");
-            saveReports(data);
-            renderMarkers();
-            setStatus("✅ Importação concluída e mapa atualizado.");
-          } catch (err) {
-            alert("Arquivo inválido. Certifique-se de selecionar um JSON exportado pela aplicação.");
+        L.tileLayer(
+          "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+          {
+            maxZoom: 19,
+            attribution:
+              '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attributions">CARTO</a>',
           }
-        };
-        reader.readAsText(file, "utf-8");
-      };
-      input.click();
-    }
+        ).addTo(map);
 
-    function limparTudo() {
-      if (
-        confirm(
-          "Tem certeza que deseja remover TODOS os reportes salvos neste navegador?"
-        )
-      ) {
-        saveReports([]);
-        renderMarkers();
-        setStatus("Todos os reportes foram removidos.");
+        markersLayer = L.layerGroup().addTo(map);
       }
-    }
-    
-    document.addEventListener("DOMContentLoaded", () => {
-      initMap();
-      renderMarkers();
 
-      btnReport.addEventListener("click", solicitarLocalizacaoEReportar);
-      btnAtualizar.addEventListener("click", renderMarkers);
-      btnExportar.addEventListener("click", exportarJSON);
-      btnImportar.addEventListener("click", importarJSON);
-      btnLimpar.addEventListener("click", limparTudo);
-    });
-  </script>
-</body>
+      function renderMarkers() {
+        if (!map) initMap();
+
+        const reports = loadReports();
+        markersLayer.clearLayers();
+
+        const bounds = [];
+        reports.forEach((r) => {
+          const marker = L.marker([r.latitude, r.longitude], {
+            title: "Buraco Reportado",
+          });
+          marker.bindPopup(
+            `<b>Buraco reportado</b><br/>Reportado em: ${formatBrDate(
+              r.timestamp
+            )}`
+          );
+          marker.bindTooltip("Buraco Reportado");
+          marker.addTo(markersLayer);
+          bounds.push([r.latitude, r.longitude]);
+        });
+
+        if (bounds.length > 0) {
+          map.fitBounds(bounds, { padding: [30, 30] });
+        } else {
+          map.setView(EMBU_COORDS, 14);
+        }
+      }
+
+      function solicitarLocalizacaoEReportar() {
+        if (!navigator.geolocation) {
+          alert("Geolocalização não é suportada por este navegador.");
+          setStatus("Falha: geolocalização não suportada.");
+          return;
+        }
+
+        alert(
+          "Vamos solicitar sua localização. As coordenadas ficam SOMENTE no seu navegador (LocalStorage). Use HTTPS ou http://localhost."
+        );
+
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            const lat = pos.coords.latitude;
+            const lng = pos.coords.longitude;
+            addReport(lat, lng);
+            renderMarkers();
+
+            const agora = new Date();
+            const dd = String(agora.getDate()).padStart(2, "0");
+            const mm = String(agora.getMonth() + 1).padStart(2, "0");
+            const yyyy = agora.getFullYear();
+            const hh = String(agora.getHours()).padStart(2, "0");
+            const mi = String(agora.getMinutes()).padStart(2, "0");
+            setStatus(
+              `✅ Buraco reportado com sucesso às ${dd}/${mm}/${yyyy} ${hh}:${mi}! O mapa foi atualizado.`
+            );
+          },
+          (error) => {
+            console.error("Erro de Geolocalização:", error);
+            setStatus(
+              "ERRO: Não foi possível obter sua localização. Verifique as permissões do navegador."
+            );
+            alert(
+              "ERRO: Não foi possível obter a sua localização. Verifique as permissões do navegador e, se necessário, abra a página em HTTPS ou http://localhost."
+            );
+          },
+          { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+        );
+      }
+
+      function exportarJSON() {
+        const blob = new Blob([JSON.stringify(loadReports(), null, 2)], {
+          type: "application/json;charset=utf-8",
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "buracos_embu.json";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+
+      const MAX_FILE_BYTES = 2 * 1024 * 1024; // 2 MB
+
+      function isReport(obj) {
+        if (!obj || typeof obj !== "object") return false;
+        const { latitude, longitude, timestamp } = obj;
+        const okNum = (n) => typeof n === "number" && Number.isFinite(n);
+        const okDate = !isNaN(Date.parse(timestamp));
+        return okNum(latitude) && okNum(longitude) && okDate;
+      }
+
+      function importarJSON() {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = "application/json";
+        input.onchange = (e) => {
+          const file = e.target.files?.[0];
+          if (!file) return;
+
+          if (file.size > MAX_FILE_BYTES) {
+            alert("Arquivo muito grande (máx. 2 MB).");
+            return;
+          }
+
+          const reader = new FileReader();
+          reader.onload = () => {
+            try {
+              const data = JSON.parse(reader.result);
+              if (!Array.isArray(data) || !data.every(isReport)) {
+                throw new Error("Formato inválido");
+              }
+              saveReports(data);
+              renderMarkers();
+              setStatus("✅ Importação concluída e mapa atualizado.");
+            } catch {
+              alert("JSON inválido. Use um arquivo exportado pela aplicação.");
+            }
+          };
+          reader.readAsText(file, "utf-8");
+        };
+        input.click();
+      }
+
+      function limparTudo() {
+        if (
+          confirm(
+            "Tem certeza que deseja remover TODOS os reportes salvos neste navegador?"
+          )
+        ) {
+          saveReports([]);
+          renderMarkers();
+          setStatus("Todos os reportes foram removidos.");
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        initMap();
+        renderMarkers();
+
+        btnReport.addEventListener("click", solicitarLocalizacaoEReportar);
+        btnAtualizar.addEventListener("click", renderMarkers);
+        btnExportar.addEventListener("click", exportarJSON);
+        btnImportar.addEventListener("click", importarJSON);
+        btnLimpar.addEventListener("click", limparTudo);
+      });
+    </script>
+  </body>
 </html>
